@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Libsodium install
-      run: apt -y update && apt -y install libsodium-dev
+      run: sudo apt -y update && sudo apt -y install libsodium-dev
     - uses: actions/checkout@v3
     - uses: haskell/actions/setup@v2
       with:

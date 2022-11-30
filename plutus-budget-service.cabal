@@ -1,0 +1,66 @@
+cabal-version:      2.4
+name:               plutus-budget-service
+version:            0.1.0.0
+
+-- A short (one-line) description of the package.
+synopsis: A server for calculating memory and cpu usage of plutus scripts
+
+-- A longer description of the package.
+-- description:
+
+-- The license under which the package is released.
+-- license:
+-- author:
+-- maintainer:
+
+-- A copyright notice.
+-- copyright:
+-- category:
+
+
+executable budget-server
+  hs-source-dirs: src
+  main-is:        Main.hs
+  other-modules:  Estimate
+  build-depends:  base ^>=4.14.1.0
+                , bytestring
+                , base16-bytestring
+                , cardano-api
+                , plutus-ledger
+                , plutus-ledger-api
+                , plutus-tx
+                , serialise
+                , tasty
+                , tasty-hunit
+                , cardano-ledger-alonzo
+                , cardano-slotting
+                , containers
+                , cardano-ledger-shelley
+                , cardano-ledger-core
+                , cardano-wallet
+                , cardano-wallet-core
+                , hex-text
+                , transformers
+                , time
+                , generic-lens
+                , ouroboros-consensus
+                , text-class
+                , aeson
+                , plutus-contract
+                , cardano-crypto-class
+                -- for Utils/Budget.hs:
+                , cardano-api
+                , cardano-wallet
+                , cardano-ledger-alonzo
+                , cardano-ledger-core
+                , strict-containers
+                , array
+                , warp
+                , wai
+                , text
+                , http-types
+                , wai-cors
+  ghc-options:
+      -threaded -rtsopts -with-rtsopts=-N -Wall -Wcompat
+      -Wincomplete-uni-patterns -Wincomplete-record-updates
+      -Wno-missing-import-lists -Wredundant-constraints -O0

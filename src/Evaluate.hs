@@ -12,7 +12,7 @@
 {-# LANGUAGE DeriveGeneric        #-}
 {-# LANGUAGE DeriveAnyClass       #-}
 
-module Estimate where
+module Evaluate where
 
 import           Data.Array                  (Array)
 import           Data.Aeson                  hiding (Array)
@@ -104,7 +104,7 @@ data Config = Config {
 } deriving (Generic, Show)
   deriving anyclass (FromJSON, ToJSON)
 
-data EstimateError = ErrAssign ErrAssignRedeemers
+data EvaluateError = ErrAssign ErrAssignRedeemers
                    | BFailure  (BasicFailure StandardCrypto)
     deriving Show
 
@@ -112,7 +112,7 @@ type AlonzoTx = Core.Tx (Shelley.ShelleyLedgerEra Shelley.AlonzoEra)
 type RedeemerReport = M.Map RdmrPtr
                             (Either (ScriptFailure StandardCrypto) ExUnits)
 
-instance ToJSON EstimateError where
+instance ToJSON EvaluateError where
     toJSON (ErrAssign errAssign) = object ["ErrAssign" .= show errAssign]
     toJSON (BFailure bFail)      = object ["BFailure" .= show bFail]
 
@@ -131,11 +131,11 @@ instance {-# OVERLAPPING #-}
     toJSON (Left err) = toJSON err
     toJSON (Right eu) = toJSON eu
 
-estimate
+evaluate
     :: Config
     -> ExportTx
-    -> Either EstimateError RedeemerReport
-estimate conf ExportTx{..} =
+    -> Either EvaluateError RedeemerReport
+evaluate conf ExportTx{..} =
     mkEpochInfo conf >>= \epochInfo ->
     case
         evaluateTransactionExecutionUnits
@@ -168,7 +168,7 @@ ti = dummyTimeInterpreter
 systemStart :: Config -> SystemStart
 systemStart = getSystemStart . ti
 
-mkEpochInfo :: Config -> Either EstimateError (EpochInfo (Either EstimateError))
+mkEpochInfo :: Config -> Either EvaluateError (EpochInfo (Either EvaluateError))
 mkEpochInfo conf =
     hoistEpochInfo
     (left (ErrAssign . ErrAssignRedeemersPastHorizon) . runIdentity . runExceptT)

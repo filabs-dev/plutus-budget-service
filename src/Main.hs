@@ -30,15 +30,15 @@ import System.Environment ( lookupEnv, getArgs )
 
 import Plutus.Contract.Wallet ( ExportTx(..) )
 
-import Estimate ( estimate, Config )
+import Evaluate ( evaluate, Config )
 
 main :: IO ()
 main = do
     port <- getPort
     config <- getConfig
-    putStrLn $ unwords ["Starting estimate-server at port:", show port]
-    putStrLn "Quit the server with CONTROL-C."
-    run port $ corsWithContentType $ estimateApp config
+    putStrLn $ unwords ["Starting budget-service at port:", show port]
+    putStrLn "Quit the service with CONTROL-C."
+    run port $ corsWithContentType $ evaluationApp config
   where
     corsWithContentType :: Middleware
     corsWithContentType =
@@ -46,18 +46,19 @@ main = do
                     { corsRequestHeaders = ["Content-Type"] }
       in cors (const $ Just policy)
 
-webAppEstimate :: Config -> Request -> IO Response
-webAppEstimate conf req =
+webAppEvaluate :: Config -> Request -> IO Response
+webAppEvaluate conf req =
     case requestMethod req of
         "POST" -> (BL.toStrict <$> consumeRequestBodyStrict req)
-                  >>= processEstimateMessage conf . A.eitherDecodeStrict
+                  >>= processEvaluateMessage conf . A.eitherDecodeStrict
                   >>= generateResponse . A.encode
         _otherMethod -> pure badRequest
 
-estimateApp :: Config -> Application
-estimateApp conf req send =
+evaluationApp :: Config -> Application
+evaluationApp conf req send =
     case pathInfo req of
-        ["estimate"] -> webAppEstimate conf req
+        ["evaluate"] -> webAppEvaluate conf req
+        ["estimate"] -> webAppEvaluate conf req -- For legacy support.
         _            -> pure badRequest
     >>= send
 
@@ -66,11 +67,11 @@ generateResponse = pure .
                    responseLBS status200
                    [(hContentType, "application/json")]
 
-processEstimateMessage :: Config -> Either String A.Value -> IO A.Value
-processEstimateMessage _ (Left err)   = return (A.toJSON err)
-processEstimateMessage conf (Right json) =
+processEvaluateMessage :: Config -> Either String A.Value -> IO A.Value
+processEvaluateMessage _ (Left err)   = return (A.toJSON err)
+processEvaluateMessage conf (Right json) =
     case A.fromJSON json :: A.Result ExportTx of
-        A.Success etx -> return $ A.toJSON $ estimate conf etx
+        A.Success etx -> return $ A.toJSON $ evaluate conf etx
         A.Error err   -> return $ A.String $ T.pack err
 
 getPort :: IO Port
@@ -84,7 +85,7 @@ getConfig :: IO Config
 getConfig = do
     confFile <- findNext (=="--config") <$> getArgs
     let fileCont = fromMaybe
-                        (error "Must provide a config file under the --config flag")
+                        (error "Must provide a config file under the flag --config [path to file].")
                         confFile
     mConf <- A.eitherDecodeFileStrict fileCont :: IO (Either String Config)
     let conf = either error id mConf

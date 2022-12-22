@@ -1,19 +1,42 @@
 # Budget Service
 
-Execution units estimate implementation extracted from the cardano-wallet. Both
-version, the cli and server, take the JSON file format from the yielded unbalanced
+Execution units evaluate implementation extracted from the cardano-wallet. The server take the JSON file format from the yielded unbalanced
 transaction that the PAB returns in the `RemoteWallet` mode. An example of this
-file can be found on `./script/etx.json`.
+file can be found on `example.json`.
 
 ## Running the server
-We start the server with
+To run the service first we need to compile from the source. This project does not require nix to be built, if you decide not to use it depending on the OS/Distribution some extra dependencies might be needed.
+
+**For debian/ubuntu:**
+
+```bash
+sudo apt install libgmp-dev zlib1g-dev libpq-dev libtinfo-dev libsodium-dev libpq5 pkg-config build-essential
 ```
-$> cabal run estimate-server
+
+**For Arch/Manjaro:**
+
+```bash
+sudo pacman -S gmp zlib postgresql-libs ncurses libsodium pkgconf base-devel
 ```
-and can call the endpoint `estimate` with the json file as the body of the
+
+You will also need a `ghc 8.10.7` and `cabal-install 3.6.2.0` please refer to [ghcup](https://www.haskell.org/ghcup/install/) on how to install
+
+Now we can compile from source:
+
+1. Clone the repository
+    - `git clone git@github.com:/joinplank/plutus-budget-service`
+2. Build using cabal:
+    - `cabal build budget-server`
+3. Execute the service:
+    - `cabal exec budget-server -- --config [Network configuration file]`
+
+Note: We provide configuration files for mainnet and preprod inside the configurations directory in the repository.****
+
+## Usage Example
+We can call the endpoint `evaluate` with the json file `example.json` as the body of the
 request. For instance running the server locally:
 ```
-$> curl -X POST localhost:3001/estimate -H 'Content-Type: application/json' -d @scripts/etx.json
+$> curl -X POST localhost:3001/evaluate -H 'Content-Type: application/json' -d @example.json
 {"Right":{"Spend:3":{"exUnitsMem":1549708,"exUnitsSteps":664250770},"Mint:0":{"exUnitsMem":1396682,"exUnitsSteps":607426316},"Spend:0":{"exUnitsMem":4164373,"exUnitsSteps":1487724013}}}
 ```
 

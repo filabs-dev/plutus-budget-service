@@ -21,7 +21,7 @@ synopsis: A server for calculating memory and cpu usage of plutus scripts
 executable budget-server
   hs-source-dirs: src
   main-is:        Main.hs
-  other-modules:  Estimate
+  other-modules:  Evaluate
   build-depends:  base ^>=4.14.1.0
                 , bytestring
                 , base16-bytestring

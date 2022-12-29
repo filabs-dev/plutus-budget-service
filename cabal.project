@@ -271,11 +271,10 @@ source-repository-package
 
 source-repository-package
   type: git
-  location: https://github.com/joinplank/plutus-apps.git
+  location: https://github.com/input-output-hk/plutus-apps.git
   subdir: doc
           freer-extras
           playground-common
-          plutus-blockfrost
           plutus-chain-index
           plutus-chain-index-core
           plutus-contract
@@ -289,7 +288,4 @@ source-repository-package
           plutus-use-cases
           quickcheck-dynamic
           web-ghc
-          blockfrost-haskell/blockfrost-api
-          blockfrost-haskell/blockfrost-client-core
-          blockfrost-haskell/blockfrost-client
-  tag: d1ae8b39e7aeb76f8b143d40a7561e3f7f786073
+  tag: e4062bca213f233cdf9822833b07aa69dff6d22a

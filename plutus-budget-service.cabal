@@ -22,44 +22,36 @@ executable budget-server
   hs-source-dirs: src
   main-is:        Main.hs
   other-modules:  Evaluate
-  build-depends:  base ^>=4.14.1.0
-                , bytestring
-                , base16-bytestring
-                , cardano-api
-                , plutus-ledger
-                , plutus-ledger-api
-                , plutus-tx
-                , serialise
-                , tasty
-                , tasty-hunit
+
+  --------------------
+  -- IOG dependencies
+  --------------------
+  build-depends:  cardano-api
+                , cardano-crypto-class
                 , cardano-ledger-alonzo
-                , cardano-slotting
-                , containers
-                , cardano-ledger-shelley
                 , cardano-ledger-core
+                , cardano-ledger-shelley
+                , cardano-slotting
                 , cardano-wallet
                 , cardano-wallet-core
-                , hex-text
-                , transformers
-                , time
-                , generic-lens
-                , ouroboros-consensus
-                , text-class
-                , aeson
                 , plutus-contract
-                , cardano-crypto-class
-                -- for Utils/Budget.hs:
-                , cardano-api
-                , cardano-wallet
-                , cardano-ledger-alonzo
-                , cardano-ledger-core
-                , strict-containers
+
+  ------------------------
+  -- Non-IOG dependencies
+  ------------------------
+  build-depends:  base ^>=4.14.1.0
+                , aeson
                 , array
-                , warp
-                , wai
-                , text
+                , bytestring
+                , containers
                 , http-types
+                , strict-containers
+                , text
+                , time
+                , transformers
+                , wai
                 , wai-cors
+                , warp
   ghc-options:
       -threaded -rtsopts -with-rtsopts=-N -Wall -Wcompat
       -Wincomplete-uni-patterns -Wincomplete-record-updates

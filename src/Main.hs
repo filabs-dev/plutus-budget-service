@@ -1,6 +1,16 @@
 {- HLINT ignore "Redundant <$>" -}
 {-# Language OverloadedStrings #-}
 
+{-|
+Module      : Main
+Description : Main functions for the server.
+Copyright   : (c) 2022 IDYIA LLC dba Plank
+Maintainer  : opensource@joinplank.com
+Stability   : develop
+
+Functions for the serrver and its configurations.
+-}
+
 module Main (main) where
 
 import           Data.Maybe                 ( fromMaybe, catMaybes )
@@ -20,7 +30,10 @@ import Network.Wai ( Application
                    )
 import Network.Wai.Handler.Warp (Port, run)
 
-import Network.Wai.Middleware.Cors
+import Network.Wai.Middleware.Cors ( cors
+                                   , simpleCorsResourcePolicy
+                                   , corsRequestHeaders
+                                   )
 
 import Network.HTTP.Types ( status200, status405
                           , hContentType

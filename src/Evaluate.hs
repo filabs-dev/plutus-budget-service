@@ -1,5 +1,4 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
-{-# LANGUAGE OverloadedStrings    #-}
 {-# LANGUAGE GADTs                #-}
 {-# LANGUAGE RecordWildCards      #-}
 {-# LANGUAGE DataKinds            #-}
@@ -9,8 +8,6 @@
 {-# LANGUAGE TypeApplications     #-}
 {-# LANGUAGE FlexibleInstances    #-}
 {-# LANGUAGE DerivingStrategies   #-}
-{-# LANGUAGE DeriveGeneric        #-}
-{-# LANGUAGE DeriveAnyClass       #-}
 
 {-|
 Module      : Evaluate

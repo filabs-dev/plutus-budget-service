@@ -43,7 +43,8 @@ import System.Environment ( lookupEnv, getArgs )
 
 import Plutus.Contract.Wallet ( ExportTx(..) )
 
-import Evaluate ( evaluate, Config )
+import Evaluate ( evaluate )
+import Config ( Config )
 
 main :: IO ()
 main = do

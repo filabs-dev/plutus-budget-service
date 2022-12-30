@@ -52,6 +52,7 @@ executable budget-server
                 , cardano-api
                 , cardano-wallet
                 , cardano-ledger-alonzo
+                , cardano-ledger-babbage
                 , cardano-ledger-core
                 , strict-containers
                 , array

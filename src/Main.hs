@@ -1,5 +1,6 @@
 {- HLINT ignore "Redundant <$>" -}
 {-# Language OverloadedStrings #-}
+{-# Language BangPatterns #-}
 
 module Main (main) where
 
@@ -35,7 +36,7 @@ import Evaluate ( evaluate, Config )
 main :: IO ()
 main = do
     port <- getPort
-    config <- getConfig
+    !config <- getConfig
     putStrLn $ unwords ["Starting budget-service at port:", show port]
     putStrLn "Quit the service with CONTROL-C."
     run port $ corsWithContentType $ evaluationApp config

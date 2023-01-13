@@ -52,7 +52,7 @@ EXPOSE 3001
 
 COPY --from=builder /build/artifacts/budget-server /app/budget-server
 
-COPY /configurations /app/configurations
+COPY /configurations /configurations
 
 # Set up a default command to run
-CMD [ "/app/budget-server", "--", "--config", "/app/configurations/preprod.json" ]
+ENTRYPOINT [ "/app/budget-server", "--", "--config" ]

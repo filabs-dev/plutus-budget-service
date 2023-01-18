@@ -1,0 +1,15 @@
+# docker
+.dockerignore
+Dockerfile
+
+# git
+.git
+.gitignore
+.github
+
+# cabal
+dist-newstyle
+
+# documentation
+README.md
+example.json

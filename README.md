@@ -4,7 +4,7 @@ Execution units evaluate implementation extracted from the cardano-wallet. The s
 transaction that the PAB returns in the `RemoteWallet` mode. An example of this
 file can be found on `example.json`.
 
-## Running the server
+## Running the server locally
 To run the service first we need to compile from the source. This project does not require nix to be built, if you decide not to use it depending on the OS/Distribution some extra dependencies might be needed.
 
 **For debian/ubuntu:**
@@ -31,6 +31,24 @@ Now we can compile from source:
     - `cabal exec budget-server -- --config [Network configuration file]`
 
 Note: We provide configuration files for mainnet and preprod inside the configurations directory in the repository.****
+
+## Running the server through Docker
+You can also run the server through docker.
+Building the image only requires you to have docker installed.
+
+You can use the provided Dockerfile to build the docker image by using the following command:
+
+`docker build --tag budget-server:0.1.0.0 .`
+
+After building the image you can run the server using:
+
+`docker run --name budget-server -p 3001:3001 -d budget-server [Network configuration file]`
+
+The default image provides two configuration files, `/configurations/mainnet.json` and `/configurations/preprod.json`. If you wish to provide your own configuration file you need to add it to the image running a command like this one:
+
+`docker run --name budget-server -p 3001:3001 -d -v [Local path to config file]:[Container path to config file] budget-server [Container path to config file]`
+
+Keep in mind that the local path should be the absolute path to the file. It is recommended to use /configurations/{filename}.json as the container path for the config file.
 
 ## Usage Example
 We can call the endpoint `evaluate` with the json file `example.json` as the body of the

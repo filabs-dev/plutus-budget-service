@@ -38,13 +38,19 @@ Building the image only requires you to have docker installed.
 
 You can use the provided Dockerfile to build the docker image by using the following command:
 
-`docker build --tag budget-server:0.1.0.0 .`
+`docker build --tag budget-server:latest .`
 
 After building the image you can run the server using:
 
 `docker run --name budget-server -p 3001:3001 -d budget-server [Network configuration file]`
 
-The default image provides two configuration files, `/configurations/mainnet.json` and `/configurations/preprod.json`. If you wish to provide your own configuration file you need to add it to the image running a command like this one:
+The default image provides two configuration files, `/configurations/mainnet.json` and `/configurations/preprod.json`.
+
+So, for instance, for running the service for preprod just run
+
+`docker run --name budget-server -p 3001:3001 -d budget-server /configurations/preprod.json`
+
+If you wish to provide your own configuration file you need to add it to the image running a command like this one:
 
 `docker run --name budget-server -p 3001:3001 -d -v [Local path to config file]:[Container path to config file] budget-server [Container path to config file]`
 

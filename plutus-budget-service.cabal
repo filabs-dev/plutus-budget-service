@@ -23,6 +23,7 @@ executable budget-server
   main-is:        Main.hs
   other-modules:  Evaluate
                   Config
+                  Utils
 
   --------------------
   -- IOG dependencies
@@ -50,6 +51,7 @@ executable budget-server
                 , text
                 , time
                 , transformers
+                , unordered-containers
                 , wai
                 , wai-cors
                 , warp

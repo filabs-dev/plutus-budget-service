@@ -97,15 +97,13 @@ findNext p (x:y:xs) | p x = Just y
 logExportTx :: Either String A.Value -> IO ()
 logExportTx (Left err) = putStrLn $
                                 unwords ["Error decoding body request:", err]
-logExportTx (Right json) =
-    case json of
-        A.Object obj -> do
-            let (A.String tx)  = fromJust $ HM.lookup "transaction" obj
+logExportTx (Right json) = do
+            let tx  = toString $
+                        fromJust $ HM.lookup "transaction" $ toObject json
             putStrLn $
                 unwords [ "Transaction in Body Request:"
-                        , take 40 (T.unpack tx) ++ "..."
+                        , take 40 tx ++ "..."
                         ]
-        _ -> putStrLn "Expected object type"
 
 {- | Pretty printing of a Request, it logs the currentTime,
      the method of the request and its path.
@@ -116,3 +114,13 @@ logRequest req = do
     print time
     putStrLn $ unwords ["Request method:", show $ requestMethod req ]
     putStrLn $ unwords ["Request path:", show $ rawPathInfo req ]
+
+-- | Given a value it returns, if possible the corresponding Object
+toObject :: A.Value -> A.Object
+toObject (A.Object obj) = obj
+toObject _ = error "Expected an object value"
+
+-- | Given a Value it returns if possible the corresponding String
+toString :: A.Value -> String
+toString (A.String txt) = T.unpack txt
+toString _ = error "Expected a string value"

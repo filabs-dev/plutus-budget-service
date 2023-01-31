@@ -42,6 +42,7 @@ import Utils  ( generateResponse
               , logRequest
               )
 
+-- | Runs the evaluation server
 main :: IO ()
 main = do
     port <- getPort
@@ -56,6 +57,9 @@ main = do
                     { corsRequestHeaders = ["Content-Type"] }
       in cors (const $ Just policy)
 
+{- | Performs the evaluation of the given Request
+    according of the configuration used.
+-}
 webAppEvaluate :: Config -> Request -> IO Response
 webAppEvaluate conf req = do
     logRequest req
@@ -72,6 +76,9 @@ webAppEvaluate conf req = do
                                ]
             pure badRequest
 
+{- | Given a Config it performs the application of the evaluate,
+    if the endpoint used by the request is "evaluate".
+-}
 evaluationApp :: Config -> Application
 evaluationApp conf req send =
     case pathInfo req of

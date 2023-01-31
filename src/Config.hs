@@ -6,6 +6,18 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ImportQualifiedPost #-}
+
+{-|
+Module      : Config
+Description : Configuration to use the evaluate server
+Copyright   : (c) 2022 IDYIA LLC dba Plank
+Maintainer  : opensource@joinplank.com
+Stability   : develop
+
+We define the general types and functions related to the Configuration
+for evaluating ExportTxs.
+-}
+
 module Config where
 
 import Cardano.Api.Shelley qualified as Shelley ( ProtocolParameters
@@ -52,6 +64,7 @@ import Data.Aeson.Types                         ( toJSONKeyText )
 import Data.Quantity                            ( Quantity (..) )
 import GHC.Generics                             ( Generic )
 
+-- | Configuration types used by the evaluation server
 data Config = Config {
     protocolParameters :: Shelley.ProtocolParameters,
     genesisTime        :: POSIXTime

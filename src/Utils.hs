@@ -42,11 +42,18 @@ import Plutus.Contract.Wallet ( ExportTx(..) )
 import Evaluate ( evaluate )
 import Config ( Config )
 
+{- | Given a ByteString, it creates a Response with a 200 (OK) status.
+     The content of the Response is related to the given ByteString
+-}
 generateResponse :: BL.ByteString -> IO Response
 generateResponse = pure .
                    responseLBS status200
                    [(hContentType, "application/json")]
 
+{- | Given a Config and either an string or a json.
+    If the json can be parsed to an ExportTx it performs the evaluation,
+    otherwise it returns an error
+-}
 processEvaluateMessage :: Config -> Either String A.Value -> IO A.Value
 processEvaluateMessage _ (Left err)   = return (A.toJSON err)
 processEvaluateMessage conf (Right json) =
@@ -54,6 +61,7 @@ processEvaluateMessage conf (Right json) =
         A.Success etx -> return $ A.toJSON $ evaluate conf etx
         A.Error err   -> return $ A.String $ T.pack err
 
+-- | Creates the port for the evaluation server
 getPort :: IO Port
 getPort = do
     portEnv <- lookupEnv "PORT"
@@ -61,6 +69,7 @@ getPort = do
     let port = head $ catMaybes [portArg, portEnv, Just "3001"]
     return $ read port
 
+-- | Creates the configuration used for the evaluation server
 getConfig :: IO Config
 getConfig = do
     confFile <- findNext (=="--config") <$> getArgs
@@ -72,6 +81,7 @@ getConfig = do
 
     return conf
 
+-- | Bad Request response when the request method is incorrect
 badRequest :: Response
 badRequest = responseBuilder status405 [] "Bad request method"
 
@@ -81,6 +91,9 @@ findNext _ [_] = Nothing
 findNext p (x:y:xs) | p x = Just y
                     | otherwise = findNext p (y:xs)
 
+{- | Log the exportTx of the request body, given either a string or a json.
+    If it is not a json it returns an error
+-}
 logExportTx :: Either String A.Value -> IO ()
 logExportTx (Left err) = putStrLn $
                                 unwords ["Error decoding body request:", err]
@@ -94,6 +107,9 @@ logExportTx (Right json) =
                         ]
         _ -> putStrLn "Expected object type"
 
+{- | Pretty printing of a Request, it logs the currentTime,
+     the method of the request and its path.
+-}
 logRequest :: Request -> IO ()
 logRequest req = do
     time <- getCurrentTime

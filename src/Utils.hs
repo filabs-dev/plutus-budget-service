@@ -113,6 +113,6 @@ logExportTx (Right json) =
 logRequest :: Request -> IO ()
 logRequest req = do
     time <- getCurrentTime
-    putStrLn $ show time
+    print time
     putStrLn $ unwords ["Request method:", show $ requestMethod req ]
     putStrLn $ unwords ["Request path:", show $ rawPathInfo req ]

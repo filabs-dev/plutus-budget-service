@@ -65,7 +65,7 @@ webAppEvaluate conf req = do
     logRequest req
     case requestMethod req of
         "POST" -> do
-            body <- (BL.toStrict <$> consumeRequestBodyStrict req)
+            body <- BL.toStrict <$> consumeRequestBodyStrict req
             let exportTx = A.eitherDecodeStrict body
             evalMessage <- processEvaluateMessage conf exportTx
             logExportTx exportTx

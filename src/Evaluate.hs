@@ -71,6 +71,10 @@ import Config ( mkEpochInfo
               , AlonzoTx
               )
 
+{- | Given a Config and an ExportTx,
+     it performs the evaluation of Execution Units.
+     If the evaluation fails returns an Evaluate Error
+-}
 evaluate
     :: Config
     -> ExportTx
@@ -109,6 +113,9 @@ utxosFromExportTxInputs insInfo =
     UTxO.UTxO $
     M.fromList [ utxoFromInputInfo input | input <- insInfo ]
 
+{- | Translates the input of an ExportTx
+     to a lower level TxIn used by the evaluate
+-}
 utxoFromInputInfo
     :: ExportTxInput
     -> ( LedgerTxIn.TxIn StandardCrypto
